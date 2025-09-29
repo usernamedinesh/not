@@ -8,9 +8,10 @@ import AddImageUploader from "../components/UploadImage";
 const SinglePost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
-  const [isDeleting, setIsdeleting] = useState(false);
+  const [isDeleting, setIsdeleting] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [auth, setAuth] = useState(false);
 
   const handleDelete = async (postId, imageId) => {
     try {
@@ -22,7 +23,7 @@ const SinglePost = () => {
     } catch (error) {
       console.error("Error deleting image", error);
     } finally {
-      setIsdeleting(false);
+      setIsdeleting(null);
     }
   };
   const handleUpdate = async (post, id) => {
@@ -53,6 +54,10 @@ const SinglePost = () => {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("swgwm");
+    if (token) {
+      setAuth(true);
+    }
     const fetchPost = async () => {
       const response = await getPostById(id);
       setPost(response.data.images);
@@ -79,26 +84,29 @@ const SinglePost = () => {
                   className="w-full h-auto object-cover rounded-lg shadow"
                 />
                 <div className="flex gap-4 py-3 justify-center items-center">
-                  {isDeleting ? (
-                    <div>...</div>
-                  ) : (
-                    <button
-                      className="px-2 py-1.5 bg-blue-500 rounded text-white"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        handleDelete(post, p);
-                      }}
-                    >
-                      delete
-                    </button>
-                  )}
-                  <button
-                    className="px-2 py-1.5 bg-green-500 rounded text-white"
-                    onClick={() => handleUpdate(post, p)}
-                  >
-                    update
-                  </button>
+                  {isDeleting === p._id ? (
+                    <div className="text-gray-500">...</div>
+                  ) : auth ? (
+                    <>
+                      <button
+                        className="px-2 py-1.5 bg-blue-500 rounded text-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleDelete(post._id, p);
+                        }}
+                      >
+                        delete
+                      </button>
+
+                      <button
+                        className="px-2 py-1.5 bg-green-500 rounded text-white"
+                        onClick={() => handleUpdate(post._id, p)}
+                      >
+                        update
+                      </button>
+                    </>
+                  ) : null}
                 </div>
               </div>
             </Link>

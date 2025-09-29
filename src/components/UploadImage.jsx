@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageUploading from "react-images-uploading";
 import { uploadImage } from "../data/api";
 import toast from "react-hot-toast";
 
 const AddImageUploader = ({ id }) => {
+  const [auth, setAuth] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("swgwm");
+    if (token) {
+      setAuth(true);
+    }
+  }, []);
+
   const [images, setImages] = useState([]);
   const [isUploading, setIsUplaoding] = useState(false);
   const maxNumber = 15;
@@ -52,14 +60,16 @@ const AddImageUploader = ({ id }) => {
         }) => (
           // Render UI
           <div className="upload__image-wrapper">
-            <button
-              style={isDragging ? { color: "red" } : undefined}
-              onClick={onImageUpload}
-              {...dragProps}
-              className="mx-4  bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              ADD Image
-            </button>
+            {auth ? (
+              <button
+                style={isDragging ? { color: "red" } : undefined}
+                onClick={onImageUpload}
+                {...dragProps}
+                className="mx-4  bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                ADD Image
+              </button>
+            ) : null}
 
             {imageList.length > 0 && (
               <div className="mt-4">
@@ -70,36 +80,40 @@ const AddImageUploader = ({ id }) => {
                       alt=""
                       className="w-64 h-auto rounded shadow-lg"
                     />
-                    <div className="mt-2 flex gap-2">
-                      <button
-                        onClick={() => onImageUpdate(index)}
-                        className="bg-yellow-400 px-2 py-1 rounded"
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => onImageRemove(index)}
-                        className="bg-red-500 text-white px-2 py-1 rounded"
-                      >
-                        Remove
-                      </button>
-                    </div>
+                    {auth ? (
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          onClick={() => onImageUpdate(index)}
+                          className="bg-yellow-400 px-2 py-1 rounded"
+                        >
+                          Updates
+                        </button>
+                        <button
+                          onClick={() => onImageRemove(index)}
+                          className="bg-red-500 text-white px-2 py-1 rounded"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : null}
                   </div>
                 ))}
               </div>
             )}
-            {!isUploading ? (
-              <button
-                className="mt-4 mx-8 rounded py-1.5 px-2 bg-lime-400 text-white font-bold"
-                onClick={handleUpload}
-              >
-                UPLOAD
-              </button>
-            ) : (
-              <button className="mt-4 mx-8 rounded py-1.5 px-2 bg-lime-400 text-white font-bold">
-                UPLOADING...
-              </button>
-            )}
+            {auth ? (
+              !isUploading ? (
+                <button
+                  className="mt-4 mx-8 rounded py-1.5 px-2 bg-lime-400 text-white font-bold"
+                  onClick={handleUpload}
+                >
+                  UPLOAD
+                </button>
+              ) : (
+                <button className="mt-4 mx-8 rounded py-1.5 px-2 bg-lime-400 text-white font-bold">
+                  UPLOADING...
+                </button>
+              )
+            ) : null}
           </div>
         )}
       </ImageUploading>
