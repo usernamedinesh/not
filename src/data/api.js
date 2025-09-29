@@ -24,7 +24,7 @@ export const getPostById = async (id) => {
 export const createPost = async (formData) => {
   try {
     const response = await axios.post(
-      `http://localhost:8080/api/post/create-post`,
+      `https://notes-bakend-5edl.onrender.com/api/post/create-post`,
       formData,
       {
         headers: {
@@ -77,7 +77,7 @@ export const deleteImages = async (postId, imageId) => {
 export const uploadImage = async (formData, postId) => {
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/post/${postId}`,
+      `https://notes-bakend-5edl.onrender.com/api/post/${postId}`,
       formData,
       {
         headers: {
