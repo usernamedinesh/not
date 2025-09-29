@@ -131,13 +131,13 @@
     ],
     "Team": [
         {
-            "img": "/hello.png",
+            "img": "/dinesh.jpeg",
             "name": "Dinesh Boro",
             "job": "Developer"
         },
         {
-            "img": "/hello.png",
-            "name": "Swgwm boro",
+            "img": "/swgwm.jpeg",
+            "name": "Swgwm Boro",
             "job": "Instructor"
         }
     ],

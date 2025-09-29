@@ -1,0 +1,44 @@
+/* LoadingWave.css */
+
+.loading-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+  background-color: white#; /* Dark background like YouTube */
+  gap: 5px;
+}
+
+.bar {
+  width: 6px;
+  height: 40px;
+  background-color: #ff0000; /* YouTube red */
+  animation: wave 1s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+.bar1 {
+  animation-delay: 0s;
+}
+.bar2 {
+  animation-delay: 0.1s;
+}
+.bar3 {
+  animation-delay: 0.2s;
+}
+.bar4 {
+  animation-delay: 0.3s;
+}
+.bar5 {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1.2);
+  }
+}
