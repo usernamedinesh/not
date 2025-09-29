@@ -1,8 +1,34 @@
 import { Link } from "react-router-dom";
 import LoadingWave from "./LoadingWave";
+import { useState } from "react";
+import UploadButton from "./Button";
+import { useEffect } from "react";
+import { deletePost } from "../data/api";
+import toast from "react-hot-toast";
 
 const POST = ({ data }) => {
-  console.log("data: ", data);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [isDeleting, setIsDeletingId] = useState("");
+
+  const handleDeletePost = async (item) => {
+    try {
+      setIsDeletingId(item);
+      const response = await deletePost(item);
+      if (response.success) {
+        toast.success("Post Deleted successfully");
+      }
+    } catch (error) {
+      console.error("error deleting post", error);
+    } finally {
+      setIsDeletingId("");
+    }
+  };
+  useEffect(() => {
+    const token = localStorage.getItem("swgwm");
+    if (token) {
+      setAuthenticated(true);
+    }
+  }, []);
   return (
     <>
       <div>
@@ -18,13 +44,27 @@ const POST = ({ data }) => {
                 <Link to={`${item._id}`}>
                   <div
                     key={index}
-                    className="bg-white rounded-lg shadow-md p-2 sm:p-4 hover:shadow-lg transition duration-300 group"
+                    className=" relative bg-white rounded-lg shadow-md p-2 sm:p-4 hover:shadow-lg transition duration-300 group"
                   >
                     <img
                       src={item.thumbnail}
                       alt={item.title}
-                      className="transform w-full h-40 lg:h-60 object-cover rounded-md mb-3 transition-transform duration-300 group-hover:scale-105"
+                      className=" transform w-full h-40 lg:h-60 object-cover rounded-md mb-3 transition-transform duration-300 group-hover:scale-105"
                     />
+                    {authenticated && (
+                      <div className="absolute left-80 top-5">
+                        <span
+                          className="absolute bg-green-700 text-white rounded text-xl py-1.5 px-4 hover:bg-lime-400 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleDeletePost(item._id);
+                          }}
+                        >
+                          {isDeleting === item._id ? "...." : "Delete"}
+                        </span>
+                      </div>
+                    )}
                     <p className="text-gray-800 font-medium lg:text-xl text-center">
                       {item.title}
                     </p>
@@ -37,6 +77,7 @@ const POST = ({ data }) => {
                   </div>
                 </Link>
               ))}
+              {authenticated ? <UploadButton /> : null}
             </div>
           ) : (
             <div>
