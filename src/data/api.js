@@ -24,7 +24,7 @@ export const getPostById = async (id) => {
 export const createPost = async (formData) => {
   try {
     const response = await axios.post(
-      `https://notes-bakend-5edl.onrender.com/api/post/create-post`,
+      `http://localhost:8080/api/post/create-post`,
       formData,
       {
         headers: {

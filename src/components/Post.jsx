@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 const POST = ({ data }) => {
   const [authenticated, setAuthenticated] = useState(false);
-  const [isDeleting, setIsDeletingId] = useState("");
+  const [isDeleting, setIsDeletingId] = useState(null);
 
   const handleDeletePost = async (item) => {
     try {
@@ -20,7 +20,7 @@ const POST = ({ data }) => {
     } catch (error) {
       console.error("error deleting post", error);
     } finally {
-      setIsDeletingId("");
+      setIsDeletingId(null);
     }
   };
   useEffect(() => {
